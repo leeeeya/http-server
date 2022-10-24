@@ -1,0 +1,13 @@
+{
+  "port": "8080",
+  "databaseConn": "user=liya password=pg123 dbname=events sslmode=disable host=localhost port=5444",
+
+  "patterns":{
+      "createPattern": "/create_event",
+      "updatePattern": "/update_event",
+      "deletePattern": "/delete_event",
+      "dayPattern": "/events_for_day",
+      "weekPattern": "/events_for_week",
+      "monthPattern": "/events_for_month"
+  }
+}

@@ -1,7 +1,7 @@
 package storage
 
-import "time"
-
-type UID int
-
-type Data map[UID]map[time.Time]string
+type Event struct {
+	UserID int    `json:"user_id"`
+	Date   string `json:"date"`
+	Event  string `json:"event"`
+}
