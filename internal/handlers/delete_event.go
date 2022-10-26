@@ -4,20 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"http-server/crud"
-	"http-server/internal/storage"
 	"log"
 	"net/http"
 )
 
-func UpdateEvent(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPatch {
+func DeleteEvent(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodDelete {
+		type Id struct {
+			Id int `json:"id"`
+		}
+		var id Id
 
-		var event storage.Event
-
-		event.Date = "none"
-		event.Event = "none"
-
-		if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&id.Id); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "Bad Request")
 			log.Println(err)
@@ -25,14 +23,14 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 		}
 		defer r.Body.Close()
 
-		if err := event.UpdateValidation(); err != nil {
+		if id.Id < 1 {
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "Bad Request")
-			log.Println(err)
+			log.Println("invalid id")
 			return
 		}
 
-		if err := crud.UpdateData(event); err != nil {
+		if err := crud.DeleteData(id.Id); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Fprintf(w, "Service Unavailable")
 			log.Println("create_event: Service Unavailable")
@@ -41,6 +39,6 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		fmt.Fprintf(w, "Service Unavailable")
-		log.Println("create_event: Service Unavailable")
+		log.Println("create_event (35): Service Unavailable")
 	}
 }

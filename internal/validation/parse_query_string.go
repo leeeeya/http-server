@@ -3,6 +3,7 @@ package validation
 import (
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func ParseQueryStr(r *http.Request) (int, string, error) {
@@ -20,5 +21,10 @@ func ParseQueryStr(r *http.Request) (int, string, error) {
 	}
 
 	date := r.URL.Query().Get("date")
+	if date != "" {
+		if _, err := time.Parse("2006-01-02", date); err != nil {
+			return 0, "", err
+		}
+	}
 	return uid, date, nil
 }

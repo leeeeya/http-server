@@ -20,24 +20,24 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			return
 		}
+		defer r.Body.Close()
 
-		if err := event.Validation(); err != nil {
+		if err := event.CreateValidation(); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "Bad Request")
 			log.Println(err)
 			return
 		}
-		defer r.Body.Close()
 
 		if err := crud.InsertData(event); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Fprintf(w, "Service Unavailable")
-			log.Println("create_event (28): Service Unavailable")
+			log.Println("create_event: Service Unavailable")
 			return
 		}
 	} else {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		fmt.Fprintf(w, "Service Unavailable")
-		log.Println("create_event (35): Service Unavailable")
+		log.Println("create_event: Service Unavailable")
 	}
 }

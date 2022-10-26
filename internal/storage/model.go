@@ -12,7 +12,7 @@ type Event struct {
 	Event  string `json:"event"`
 }
 
-func (e Event) Validation() error {
+func (e Event) CreateValidation() error {
 	if err := e.DateValidation(); err != nil {
 		return err
 	}
@@ -21,6 +21,32 @@ func (e Event) Validation() error {
 	}
 	if err := e.EventValidation(); err != nil {
 		return err
+	}
+	return nil
+}
+
+func (e *Event) UpdateValidation() error {
+	if e.Date != "none" {
+		if err := e.DateValidation(); err != nil {
+			return err
+		}
+	} else if e.Event == "none" {
+		return fmt.Errorf("nothing to update")
+	} else {
+		e.Date = ""
+	}
+	if e.Event != "none" {
+		if err := e.EventValidation(); err != nil {
+			return err
+		}
+	} else {
+		e.Event = ""
+	}
+	if e.UserID != 0 {
+		return fmt.Errorf("can't update user_id")
+	}
+	if e.ID <= 0 {
+		return fmt.Errorf("invalid ID")
 	}
 	return nil
 }
