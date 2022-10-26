@@ -9,8 +9,8 @@ import (
 	"net/http"
 )
 
-func CreateEvent(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
+func UpdateEvent(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPatch {
 
 		var event storage.Event
 
@@ -20,14 +20,8 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			return
 		}
-
-		if err := event.Validation(); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "Bad Request")
-			log.Println(err)
-			return
-		}
 		defer r.Body.Close()
+		fmt.Println(event)
 
 		if err := crud.InsertData(event); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)

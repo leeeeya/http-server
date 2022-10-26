@@ -16,6 +16,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/calendar/create_event", handlers.CreateEvent)
+	mux.HandleFunc("/calendar/update_event", handlers.UpdateEvent)
 
 	mux.HandleFunc("/calendar/events_for_day", handlers.GetEventsForDay)
 	mux.HandleFunc("/calendar/events_for_week", handlers.GetEventsForWeek)

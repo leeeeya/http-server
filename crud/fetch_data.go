@@ -13,16 +13,50 @@ func serialising(event []storage.Event) ([]byte, error) {
 	return json.Marshal(event)
 }
 
-func FetchData(interval string) ([]byte, error) {
+func handleQueryString(interval, date string, uid int) (string, string) {
+	var uidCond, dateCond string
+
+	if uid == 0 {
+		uidCond = ""
+	} else {
+		uidCond = fmt.Sprintf("user_id = %d ", uid)
+	}
+
+	if date == "" {
+		switch interval {
+		case storage.Day:
+			dateCond = "date = date(now())"
+		default:
+			dateCond = fmt.Sprintf("date <= now() - '1%s'::interval", interval)
+		}
+	} else {
+		switch interval {
+		case storage.Day:
+			dateCond = fmt.Sprintf("date = '%s'", date)
+		default:
+			dateCond = fmt.Sprintf("date between '%s' and date('%s') + '1%s'::interval", date, date, interval)
+		}
+	}
+	return uidCond, dateCond
+}
+
+func FetchData(interval, date string, uid int) ([]byte, error) {
 	var tmp storage.Event
+	var and string
 
 	event := make([]storage.Event, 0)
-	query := fmt.Sprintf("SELECT user_id, date, event FROM events WHERE date >= now() - '1%s'::interval", interval)
+
+	uidCond, dateCond := handleQueryString(interval, date, uid)
+
+	if uidCond != "" {
+		and = "and "
+	}
+	query := "SELECT * FROM events WHERE " + uidCond + and + dateCond
 
 	if rows, err := db.DB.Query(query); err == nil {
 		defer rows.Close()
 		for rows.Next() == true {
-			if err := rows.Scan(&tmp.UserID, &tmp.Date, &tmp.Event); err != nil {
+			if err := rows.Scan(&tmp.ID, &tmp.UserID, &tmp.Date, &tmp.Event); err != nil {
 				log.Println(err)
 				return nil, err
 			} else {
