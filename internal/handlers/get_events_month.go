@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"http-server/crud"
+	"http-server/internal/crud"
 	"http-server/internal/storage"
 	"http-server/internal/validation"
 	"log"

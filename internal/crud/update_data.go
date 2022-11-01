@@ -7,10 +7,12 @@ import (
 	"log"
 )
 
+// UpdateData обновление данных
 func UpdateData(e storage.Event) error {
 	var updDate, updEvent string
 	comma := ","
 
+	// проверка полей, которые требуется обновить
 	if e.Date != "" {
 		updDate = fmt.Sprintf("date = '%s'", e.Date)
 	}

@@ -2,42 +2,37 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
-	"http-server/crud"
+	"http-server/internal/crud"
+	error_handler "http-server/internal/error-handler"
 	"http-server/internal/storage"
 	"log"
 	"net/http"
 )
 
+// CreateEvent обработчик для создания записи в календаре
 func CreateEvent(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 
 		var event storage.Event
 
+		// десериализация данных, полученных в POST-запросе, для записи в БД
 		if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "Bad Request")
-			log.Println(err)
+			error_handler.Handle(w, http.StatusInternalServerError, err)
 			return
 		}
 		defer r.Body.Close()
 
 		if err := event.CreateValidation(); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintf(w, "Bad Request")
-			log.Println(err)
+			error_handler.Handle(w, http.StatusBadRequest, err)
 			return
 		}
 
 		if err := crud.InsertData(event); err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintf(w, "Service Unavailable")
-			log.Println("create_event: Service Unavailable")
+			error_handler.Handle(w, http.StatusBadRequest, err)
 			return
 		}
 	} else {
-		w.WriteHeader(http.StatusServiceUnavailable)
-		fmt.Fprintf(w, "Service Unavailable")
-		log.Println("create_event: Service Unavailable")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		log.Println(http.StatusText(http.StatusInternalServerError))
 	}
 }

@@ -10,6 +10,7 @@ import (
 
 var DB *sql.DB
 
+// проверка установления соединения с БД
 func ping(ctx context.Context) {
 	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
 	defer cancel()
@@ -20,6 +21,7 @@ func ping(ctx context.Context) {
 	}
 }
 
+// InitDB подключение к базе данных Postgresql
 func InitDB(connStr string) {
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {

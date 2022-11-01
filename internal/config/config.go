@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"encoding/json"
@@ -22,6 +22,7 @@ type Config struct {
 	Patterns     Patterns `json:"patterns"`
 }
 
+// InitConfig чтение конфига
 func InitConfig() Config {
 	var config Config
 

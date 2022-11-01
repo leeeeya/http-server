@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"http-server/crud"
+	"http-server/internal/crud"
 	"log"
 	"net/http"
 )
@@ -15,7 +15,7 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 		}
 		var id Id
 
-		if err := json.NewDecoder(r.Body).Decode(&id.Id); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&id); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintf(w, "Bad Request")
 			log.Println(err)

@@ -31,7 +31,7 @@ func (e *Event) UpdateValidation() error {
 			return err
 		}
 	} else if e.Event == "none" {
-		return fmt.Errorf("nothing to update")
+		return fmt.Errorf("Error: nothing to update")
 	} else {
 		e.Date = ""
 	}
@@ -43,10 +43,10 @@ func (e *Event) UpdateValidation() error {
 		e.Event = ""
 	}
 	if e.UserID != 0 {
-		return fmt.Errorf("can't update user_id")
+		return fmt.Errorf("Error: can't update user_id")
 	}
 	if e.ID <= 0 {
-		return fmt.Errorf("invalid ID")
+		return fmt.Errorf("Error: invalid ID")
 	}
 	return nil
 }
@@ -58,21 +58,21 @@ func (e *Event) DateValidation() error {
 
 func (e Event) UidValidation() error {
 	if e.UserID < 1 {
-		return fmt.Errorf("invalid user_id")
+		return fmt.Errorf("Error: invalid user_id")
 	}
 	return nil
 }
 
 func (e Event) EventValidation() error {
 	if e.Event == "" {
-		return fmt.Errorf("invalid event")
+		return fmt.Errorf("Error: invalid event")
 	}
 	return nil
 }
 
 func (e Event) IdValidation() error {
 	if e.ID < 1 {
-		return fmt.Errorf("invalid ID")
+		return fmt.Errorf("Error: invalid ID")
 	}
 	return nil
 }

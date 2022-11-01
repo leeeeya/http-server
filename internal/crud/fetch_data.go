@@ -9,10 +9,12 @@ import (
 	"log"
 )
 
+// сериализация данных для отправки клиенту
 func serialising(event []storage.Event) ([]byte, error) {
 	return json.Marshal(event)
 }
 
+// получение параметров из queryString для метода GET
 func handleQueryString(interval, date string, uid int) (string, string) {
 	var uidCond, dateCond string
 
@@ -40,6 +42,7 @@ func handleQueryString(interval, date string, uid int) (string, string) {
 	return uidCond, dateCond
 }
 
+// FetchData получение данных из БД
 func FetchData(interval, date string, uid int) ([]byte, error) {
 	var tmp storage.Event
 	var and string

@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"http-server/crud"
+	"http-server/internal/crud"
 	"http-server/internal/storage"
 	"log"
 	"net/http"
